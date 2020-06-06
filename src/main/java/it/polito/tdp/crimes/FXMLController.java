@@ -5,6 +5,7 @@
 package it.polito.tdp.crimes;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.crimes.model.Model;
@@ -17,7 +18,7 @@ import javafx.scene.control.TextField;
 
 public class FXMLController {
 	private Model model;
-
+    
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -25,7 +26,7 @@ public class FXMLController {
     private URL location;
 
     @FXML // fx:id="boxAnno"
-    private ComboBox<?> boxAnno; // Value injected by FXMLLoader
+    private ComboBox<Integer> boxAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxMese"
     private ComboBox<?> boxMese; // Value injected by FXMLLoader
@@ -47,12 +48,19 @@ public class FXMLController {
 
     @FXML
     void doCreaReteCittadina(ActionEvent event) {
+      model.creaGrafo(boxAnno.getValue());
+      txtResult.setText("Grafo creato con "+model.getNumVertici()+" vertici e con "+this.model.getNumArchi() +" archi+\n");
 
+      for(Integer v:model.getVertici()) {
+    	 txtResult.appendText("Vicini del vertice "+v+"\n"+ model.getElenco(v));
+     }
+      
     }
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    model.simulazione();
+    
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -69,5 +77,6 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.boxAnno.getItems().addAll(this.model.getAnni());
     }
 }
